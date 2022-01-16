@@ -64,8 +64,11 @@ exports.reserv_get = function(req, res, next) {
 				$and:[
 					{ 'client': null },
 					{ $and: [
-							{ 'start_time': { $gte: (new Date(new Date(req.params.time1) - 100)).toISOString().slice(0, -1) }, },
-							{ 'end_time': { $lte: (new Date(new Date(req.params.time2))).toISOString().slice(0, -1) }, },
+							//{ 'start_time': { $gte: (new Date(new Date(req.params.time1) - 100)).toISOString().slice(0, -1) }, },
+							//{ 'end_time': { $lte: (new Date(new Date(req.params.time2))).toISOString().slice(0, -1) }, },
+							
+							{ 'start_time': { $gte: (new Date(new Date(req.params.time1) - 100)).toISOString() }, },
+							{ 'end_time': { $lte: (new Date(new Date(req.params.time2))).toISOString() }, },
 					]},
 				]
 			})
