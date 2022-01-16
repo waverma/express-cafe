@@ -7,19 +7,6 @@ var moment = require('moment');
 const { body,validationResult } = require('express-validator');
 
 
-
-
-const Vonage = require('@vonage/server-sdk')
-const vonage = new Vonage({
-  apiKey: "9e7ddfe4",
-  apiSecret: "Vn8evY5omNOGe7tb"
-})
-const from = "Vonage APIs"
-const to = "79655189368"
-const text = 'A text message sent using the Vonage SMS API'
-
-
-
 var async = require('async');
 
 exports.table_list = function(req, res, next) {
@@ -44,8 +31,7 @@ exports.invalid_client_number_get = function(req, res, next) {
 
 exports.invalid_client_number_post = [
 	(req, res, next) => {
-		var url = '/cafe/reservation/' + req.params.time1 + '/' + req.params.time2 +'/form'
-		res.redirect(url);
+		res.redirect('/cafe/reservation/' + req.params.time1 + '/' + req.params.time2 +'/form');
 	}
 ];
 
@@ -56,8 +42,7 @@ exports.reserv_day_select_post = [
 ];
 
 exports.reserv_date_join_get = function(req, res, next) {
-	var url = '/cafe/reservation/' + req.params.day + 'T' + req.params.time1 + ':00.000Z' + '/' +  req.params.day + 'T' + req.params.time2 + ':00.000Z' + '/form'
-	res.redirect(url);
+	res.redirect('/cafe/reservation/' + req.params.day + 'T' + req.params.time1 + ':00.000Z' + '/' +  req.params.day + 'T' + req.params.time2 + ':00.000Z' + '/form');
 };
 
 
@@ -73,8 +58,6 @@ exports.success_get = function(req, res, next) {
 
 
 exports.reserv_get = function(req, res, next) {
-	console.log(new Date(req.params.time1).toISOString())
-	console.log(new Date(req.params.time2).toISOString())
 	async.parallel({
         reservations: function(callback) {
 			Reservation.find({
@@ -107,36 +90,13 @@ exports.reserv_get = function(req, res, next) {
 exports.reserv_post = [
 	(req, res, next) => {
 			new_client = new Client({first_name: req.body.first_name, last_name: req.body.last_name, phone_number: req.body.number});
-			console.log(req.body.first_name)
-			console.log(req.body.last_name)
-			console.log(req.body.number)
-			
-			if (req.body.first_name == 'admin'){
-				vonage.message.sendSms(from, to, text, (err, responseData) => {
-					if (err) {
-						console.log(err);
-					} else {
-						if(responseData.messages[0]['status'] === "0") {
-							console.log("Message sent successfully.");
-						} else {
-							console.log(`Message failed with error: ${responseData.messages[0]['error-text']}`);
-						}
-					}
-				})
-				res.redirect('/cafe/reservation/success');
-				console.log('ADMIN DETECTED')
-				return;
-			}
-			
 			Client.find({'phone_number': req.body.number}) 
 					.exec(function(err, results) {
 						if (results.length != 0){
 							if (results[0].first_name == req.body.first_name && results[0].last_name == req.body.last_name){
 								Reservation.update({_id: req.body.reservation}, {client: results[0]}, function(err, affected, resp) {console.log(resp);});
-								console.log(req.body.reservation)
 								res.redirect('/cafe/reservation/success');
 							} else{
-								console.log('INVALID CLIENT DETAILS')
 								res.redirect('/cafe/reservation/wrong/' +  req.params.time1 + '/' + req.params.time2);
 							}
 						} else{

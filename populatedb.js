@@ -208,71 +208,6 @@ function createTable(cb) {
 }
 
 
-//function createReservation(cb) {
-//    async.series([
-//        function(callback) {
-//			reservationSchemaCreate(clients[1], tables[0], '2022-02-01 15:00:00', '2022-02-01 18:00:00', callback);
-//        },
-//		function(callback) {
-//			reservationSchemaCreate(clients[2], tables[0], '2022-02-01 18:00:00', '2022-02-01 20:00:00', callback);
-//        },
-//		function(callback) {
-//			reservationSchemaCreate(clients[3], tables[0], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);
-//        },
-//		function(callback) {
-//			reservationSchemaCreate(clients[4], tables[1], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);
-//        },
-//		function(callback) {
-//			reservationSchemaCreate(clients[4], tables[2], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);
-//        },
-//		function(callback) {
-//			reservationSchemaCreate(clients[6], tables[2], '2022-02-01 18:00:00', '2022-02-01 23:00:00', callback);
-//        },
-//		function(callback) {
-//			reservationSchemaCreate(clients[7], tables[3], '2022-02-01 15:00:00', '2022-02-01 22:00:00', callback);
-//        },
-//		function(callback) {
-//			reservationSchemaCreate(clients[8], tables[4], '2022-02-01 15:00:00', '2022-02-01 18:00:00', callback);
-//        },
-//		function(callback) {
-//			reservationSchemaCreate(clients[9], tables[5], '2022-02-01 15:00:00', '2022-02-01 17:00:00', callback);
-//        },
-//		function(callback) {
-//			reservationSchemaCreate(clients[10], tables[5], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);
-//        },
-//		function(callback) {
-//			reservationSchemaCreate(clients[5], tables[5], '2022-02-01 19:00:00', '2022-02-01 20:30:00', callback);
-//        },
-//        ],
-//        // optional callback
-//        cb);
-//}
-
-
-
-//function(callback) {
-//	var monthNumber = '02';
-//	
-//	for (var day = 1; day < 29; day++) {
-//		for (var hour = 12; hour < 24; hour++) {
-//			for (var table = 0; table < 10; table++) {
-//				var d = '';
-//				if (day < 10) d='0'+day
-//				else d=day
-//				console.log('table: '+table);
-//				console.log('from: ' + '2022-'+monthNumber+'-'+d+' '+hour+':00:00');
-//				console.log('to: ' + '2022-'+monthNumber+'-'+d+' '+(hour+1)+':00:00');
-//				console.log();
-//				reservationSchemaCreate(null, tables[table], '2022-'+monthNumber+'-'+d+' '+hour+':00:00', '2022-'+monthNumber+'-'+d+' '+(hour+1)+':00:00', callback);
-//			}
-//		}
-//	}
-//},
-
-
-
-
-
 function createReservation(cb) {
     async.series([
         function(callback) {
@@ -284,10 +219,6 @@ function createReservation(cb) {
 						var d = '';
 						if (day < 10) d='0'+day
 						else d=day
-						//console.log('table: '+table);
-						//console.log('from: ' + '2022-'+monthNumber+'-'+d+' '+hour+':00:00');
-						//console.log('to: ' + '2022-'+monthNumber+'-'+d+' '+(hour+1)+':00:00');
-						//console.log();
 						reservationSchemaCreate(null, tables[table], '2022-'+monthNumber+'-'+d+' '+hour+':00:00', '2022-'+monthNumber+'-'+d+' '+(hour+1)+':00:00', callback);
 					}
 				}
@@ -307,13 +238,5 @@ async.series([
 ],
 // Optional callback
 function(err, results) {
-    //if (err) {
-    //    console.log('FINAL ERR: '+err);
-    //}
-    //else {
-    //    console.log('BOOKInstances: '+bookinstances);
-    //    
-    //}
-    // All done, disconnect from database
     mongoose.connection.close();
 });

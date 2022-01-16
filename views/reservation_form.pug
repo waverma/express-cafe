@@ -24,9 +24,3 @@ block content
 						| Официант: #{reservation.table.waiter.first_name} #{reservation.table.waiter.last_name} (#{reservation.table.waiter.gender})
 		
 		button.btn.btn-primary(type='submit') Забронировать
-	
-	
-	if errors
-		ul
-			for error in errors
-				li!= error.msg

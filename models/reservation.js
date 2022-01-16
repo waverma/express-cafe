@@ -37,8 +37,6 @@ ReservationSchema
 ReservationSchema
 	.virtual('comparable_date')
 	.get(function () {
-		//return moment(this.start_time).format('YYYY-mm-ddTHH:mm:ss');
-		console.log(this.start_time.toISOString());
 		return this.start_time.toISOString();
 });
 	
