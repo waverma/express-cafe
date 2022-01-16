@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var catalogRouter = require('./routes/cafe');  //Import routes for "catalog" area of site
 
 var app = express();
@@ -20,15 +19,6 @@ mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-//db.on('connected', function(err) {
-//	if (!err) {
-//		db.db.dropDatabase(function(err) {
-//            cb(err);
-//            });
-//        } else {
-//            cb(err);
-//        }
-//});
 
 
 
@@ -44,7 +34,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/cafe', catalogRouter);
 
 // catch 404 and forward to error handler

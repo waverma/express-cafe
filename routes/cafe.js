@@ -4,19 +4,6 @@ var router = express.Router();
 // Требующиеся модули контроллеров.
 var table_controller = require('../controllers/tableController');
 
-//router.get('/', table_controller.index);
-
-//router.get('/:id/create', table_controller.reservation_create_get);
-//router.get('/list', table_controller.table_list);
-//router.get('/:id/info', table_controller.table_info);
-//router.get('/book/:id/update', table_controller.reservation_update_get);
-//router.post('/reservation/create', table_controller.reservation_create_post);
-//router.post('/:id/info', table_controller.reservation_create_post);
-
-
-
-
-
 
 router.get('/home', table_controller.cafe_description);
 router.get('/menu', table_controller.cafe_menu);

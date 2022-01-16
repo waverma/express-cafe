@@ -25,7 +25,6 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 
 
-//db.dropDatabase(function(err) {cb(err);});	
 
 
 var clients = []
@@ -67,10 +66,11 @@ function waiterCreate(first_name, last_name, phone_number, gender, date_of_birth
 	});
 }
 
-function tableCreate(number, capacity, waiter, cb) {
+function tableCreate(number, capacity, description, waiter, cb) {
   tabledetail = { 
     number: number,
     capacity: capacity,
+	description: description,
     waiter: waiter
   }
     
@@ -104,7 +104,7 @@ function reservationSchemaCreate(client, table, start_time, end_time, cb) {
 		}
 		console.log('New reservation: ' + reservation);
 		reservations.push(reservation)
-		cb(null, reservation)
+		//cb(null, reservation)
 	});
 }
 
@@ -150,19 +150,19 @@ function createClients(cb) {
 function createWaiters(cb) {
     async.series([
         function(callback) {
-			waiterCreate('WFN1', 'WLN1', '1233333333', 'Female', '2001-06-06', callback);
+			waiterCreate('Катя', 'Попова', '1233333333', 'Female', '2001-06-06', callback);
         },
         function(callback) {
-			waiterCreate('WFN2', 'WLN2', '2233333333', 'Female', '2002-11-8', callback);
+			waiterCreate('Лиза', 'Степанова', '2233333333', 'Female', '2002-11-8', callback);
         },
         function(callback) {
-			waiterCreate('WFN3', 'WLN3', '3233333333', 'Male', '2003-04-06', callback);
+			waiterCreate('Иван', 'Иванов', '3233333333', 'Male', '2003-04-06', callback);
         },
         function(callback) {
-			waiterCreate('WFN4', 'WLN4', '4233333333', 'Male', '2004-12-16', callback);
+			waiterCreate('Александр Палкин', 'WLN4', '4233333333', 'Male', '2004-12-16', callback);
         },
         function(callback) {
-			waiterCreate('WFN5', 'WLN5', '5233333333', 'Female', '2005-12-16', callback);
+			waiterCreate('Евгения', 'Ручкина', '5233333333', 'Female', '2005-12-16', callback);
         },
         ],
         // optional callback
@@ -173,34 +173,34 @@ function createWaiters(cb) {
 function createTable(cb) {
     async.series([
         function(callback) {
-			tableCreate(1, 4, waiters[0], callback);
+			tableCreate(1, 4, 'в центре зала', waiters[0], callback);
         },
         function(callback) {
-			tableCreate(2, 6, waiters[0], callback);
+			tableCreate(2, 2, 'в центре зала', waiters[0], callback);
         },
 		function(callback) {
-			tableCreate(3, 4, waiters[1], callback);
+			tableCreate(3, 5, 'у малого окна', waiters[1], callback);
         },
         function(callback) {
-			tableCreate(4, 6, waiters[1], callback);
+			tableCreate(4, 6, 'у малого окна', waiters[1], callback);
         },
 		function(callback) {
-			tableCreate(5, 4, waiters[2], callback);
+			tableCreate(5, 4, 'на веранде', waiters[2], callback);
         },
         function(callback) {
-			tableCreate(6, 6, waiters[2], callback);
+			tableCreate(6, 8, 'на веранде', waiters[2], callback);
         },
 		function(callback) {
-			tableCreate(7, 4, waiters[3], callback);
+			tableCreate(7, 4, 'на веранде', waiters[3], callback);
         },
         function(callback) {
-			tableCreate(8, 6, waiters[3], callback);
+			tableCreate(8, 6, 'на улице', waiters[3], callback);
         },
 		function(callback) {
-			tableCreate(9, 4, waiters[4], callback);
+			tableCreate(9, 4, 'на улице', waiters[4], callback);
         },
         function(callback) {
-			tableCreate(10, 6, waiters[4], callback);
+			tableCreate(10, 10, 'на улице', waiters[4], callback);
         },
         ],
         // optional callback
@@ -208,177 +208,91 @@ function createTable(cb) {
 }
 
 
-function createReservation(cb) {
-    async.series([
-        function(callback) {
-			reservationSchemaCreate(clients[1], tables[0], '2022-02-01 15:00:00', '2022-02-01 18:00:00', callback);
-        },
-		function(callback) {
-			reservationSchemaCreate(clients[2], tables[0], '2022-02-01 18:00:00', '2022-02-01 20:00:00', callback);
-        },
-		function(callback) {
-			reservationSchemaCreate(clients[3], tables[0], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);
-        },
-		function(callback) {
-			reservationSchemaCreate(clients[4], tables[1], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);
-        },
-		function(callback) {
-			reservationSchemaCreate(clients[4], tables[2], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);
-        },
-		function(callback) {
-			reservationSchemaCreate(clients[6], tables[2], '2022-02-01 18:00:00', '2022-02-01 23:00:00', callback);
-        },
-		function(callback) {
-			reservationSchemaCreate(clients[7], tables[3], '2022-02-01 15:00:00', '2022-02-01 22:00:00', callback);
-        },
-		function(callback) {
-			reservationSchemaCreate(clients[8], tables[4], '2022-02-01 15:00:00', '2022-02-01 18:00:00', callback);
-        },
-		function(callback) {
-			reservationSchemaCreate(clients[9], tables[5], '2022-02-01 15:00:00', '2022-02-01 17:00:00', callback);
-        },
-		function(callback) {
-			reservationSchemaCreate(clients[10], tables[5], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);
-        },
-		function(callback) {
-			reservationSchemaCreate(clients[5], tables[5], '2022-02-01 19:00:00', '2022-02-01 20:30:00', callback);
-        },
-        ],
-        // optional callback
-        cb);
-}
+//function createReservation(cb) {
+//    async.series([
+//        function(callback) {
+//			reservationSchemaCreate(clients[1], tables[0], '2022-02-01 15:00:00', '2022-02-01 18:00:00', callback);
+//        },
+//		function(callback) {
+//			reservationSchemaCreate(clients[2], tables[0], '2022-02-01 18:00:00', '2022-02-01 20:00:00', callback);
+//        },
+//		function(callback) {
+//			reservationSchemaCreate(clients[3], tables[0], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);
+//        },
+//		function(callback) {
+//			reservationSchemaCreate(clients[4], tables[1], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);
+//        },
+//		function(callback) {
+//			reservationSchemaCreate(clients[4], tables[2], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);
+//        },
+//		function(callback) {
+//			reservationSchemaCreate(clients[6], tables[2], '2022-02-01 18:00:00', '2022-02-01 23:00:00', callback);
+//        },
+//		function(callback) {
+//			reservationSchemaCreate(clients[7], tables[3], '2022-02-01 15:00:00', '2022-02-01 22:00:00', callback);
+//        },
+//		function(callback) {
+//			reservationSchemaCreate(clients[8], tables[4], '2022-02-01 15:00:00', '2022-02-01 18:00:00', callback);
+//        },
+//		function(callback) {
+//			reservationSchemaCreate(clients[9], tables[5], '2022-02-01 15:00:00', '2022-02-01 17:00:00', callback);
+//        },
+//		function(callback) {
+//			reservationSchemaCreate(clients[10], tables[5], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);
+//        },
+//		function(callback) {
+//			reservationSchemaCreate(clients[5], tables[5], '2022-02-01 19:00:00', '2022-02-01 20:30:00', callback);
+//        },
+//        ],
+//        // optional callback
+//        cb);
+//}
+
+
+
+//function(callback) {
+//	var monthNumber = '02';
+//	
+//	for (var day = 1; day < 29; day++) {
+//		for (var hour = 12; hour < 24; hour++) {
+//			for (var table = 0; table < 10; table++) {
+//				var d = '';
+//				if (day < 10) d='0'+day
+//				else d=day
+//				console.log('table: '+table);
+//				console.log('from: ' + '2022-'+monthNumber+'-'+d+' '+hour+':00:00');
+//				console.log('to: ' + '2022-'+monthNumber+'-'+d+' '+(hour+1)+':00:00');
+//				console.log();
+//				reservationSchemaCreate(null, tables[table], '2022-'+monthNumber+'-'+d+' '+hour+':00:00', '2022-'+monthNumber+'-'+d+' '+(hour+1)+':00:00', callback);
+//			}
+//		}
+//	}
+//},
+
+
+
+
 
 function createReservation(cb) {
     async.series([
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 12:00:00', '2022-02-01 13:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 13:00:00', '2022-02-01 14:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 14:00:00', '2022-02-01 15:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 16:00:00', '2022-02-01 17:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 18:00:00', '2022-02-01 19:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 19:00:00', '2022-02-01 20:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 20:00:00', '2022-02-01 21:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 22:00:00', '2022-02-01 23:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[0], '2022-02-01 23:00:00', '2022-02-01 24:00:00', callback);},
-		
-		function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 12:00:00', '2022-02-01 13:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 13:00:00', '2022-02-01 14:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 14:00:00', '2022-02-01 15:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 16:00:00', '2022-02-01 17:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 18:00:00', '2022-02-01 19:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 19:00:00', '2022-02-01 20:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 20:00:00', '2022-02-01 21:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 22:00:00', '2022-02-01 23:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[1], '2022-02-01 23:00:00', '2022-02-01 24:00:00', callback);},
-		
-		function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 12:00:00', '2022-02-01 13:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 13:00:00', '2022-02-01 14:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 14:00:00', '2022-02-01 15:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 16:00:00', '2022-02-01 17:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 18:00:00', '2022-02-01 19:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 19:00:00', '2022-02-01 20:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 20:00:00', '2022-02-01 21:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 22:00:00', '2022-02-01 23:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[2], '2022-02-01 23:00:00', '2022-02-01 24:00:00', callback);},
-		
-		function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 12:00:00', '2022-02-01 13:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 13:00:00', '2022-02-01 14:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 14:00:00', '2022-02-01 15:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 16:00:00', '2022-02-01 17:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 18:00:00', '2022-02-01 19:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 19:00:00', '2022-02-01 20:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 20:00:00', '2022-02-01 21:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 22:00:00', '2022-02-01 23:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[3], '2022-02-01 23:00:00', '2022-02-01 24:00:00', callback);},
-		
-		function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 12:00:00', '2022-02-01 13:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 13:00:00', '2022-02-01 14:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 14:00:00', '2022-02-01 15:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 16:00:00', '2022-02-01 17:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 18:00:00', '2022-02-01 19:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 19:00:00', '2022-02-01 20:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 20:00:00', '2022-02-01 21:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 22:00:00', '2022-02-01 23:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[4], '2022-02-01 23:00:00', '2022-02-01 24:00:00', callback);},
-		
-		function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 12:00:00', '2022-02-01 13:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 13:00:00', '2022-02-01 14:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 14:00:00', '2022-02-01 15:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 16:00:00', '2022-02-01 17:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 18:00:00', '2022-02-01 19:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 19:00:00', '2022-02-01 20:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 20:00:00', '2022-02-01 21:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 22:00:00', '2022-02-01 23:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[5], '2022-02-01 23:00:00', '2022-02-01 24:00:00', callback);},
-		
-		function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 12:00:00', '2022-02-01 13:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 13:00:00', '2022-02-01 14:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 14:00:00', '2022-02-01 15:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 16:00:00', '2022-02-01 17:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 18:00:00', '2022-02-01 19:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 19:00:00', '2022-02-01 20:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 20:00:00', '2022-02-01 21:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 22:00:00', '2022-02-01 23:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[6], '2022-02-01 23:00:00', '2022-02-01 24:00:00', callback);},
-		
-		function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 12:00:00', '2022-02-01 13:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 13:00:00', '2022-02-01 14:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 14:00:00', '2022-02-01 15:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 16:00:00', '2022-02-01 17:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 18:00:00', '2022-02-01 19:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 19:00:00', '2022-02-01 20:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 20:00:00', '2022-02-01 21:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 22:00:00', '2022-02-01 23:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[7], '2022-02-01 23:00:00', '2022-02-01 24:00:00', callback);},
-		
-		function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 12:00:00', '2022-02-01 13:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 13:00:00', '2022-02-01 14:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 14:00:00', '2022-02-01 15:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 16:00:00', '2022-02-01 17:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 18:00:00', '2022-02-01 19:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 19:00:00', '2022-02-01 20:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 20:00:00', '2022-02-01 21:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 22:00:00', '2022-02-01 23:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[8], '2022-02-01 23:00:00', '2022-02-01 24:00:00', callback);},
-		
-		function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 12:00:00', '2022-02-01 13:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 13:00:00', '2022-02-01 14:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 14:00:00', '2022-02-01 15:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 15:00:00', '2022-02-01 16:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 16:00:00', '2022-02-01 17:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 17:00:00', '2022-02-01 18:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 18:00:00', '2022-02-01 19:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 19:00:00', '2022-02-01 20:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 20:00:00', '2022-02-01 21:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 21:00:00', '2022-02-01 22:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 22:00:00', '2022-02-01 23:00:00', callback);},
-        function(callback) {reservationSchemaCreate(null, tables[9], '2022-02-01 23:00:00', '2022-02-01 24:00:00', callback);},
+        function(callback) {
+			var monthNumber = '02';
+			
+			for (var day = 1; day < 29; day++) {
+				for (var hour = 12; hour < 24; hour++) {
+					for (var table = 0; table < 10; table++) {
+						var d = '';
+						if (day < 10) d='0'+day
+						else d=day
+						//console.log('table: '+table);
+						//console.log('from: ' + '2022-'+monthNumber+'-'+d+' '+hour+':00:00');
+						//console.log('to: ' + '2022-'+monthNumber+'-'+d+' '+(hour+1)+':00:00');
+						//console.log();
+						reservationSchemaCreate(null, tables[table], '2022-'+monthNumber+'-'+d+' '+hour+':00:00', '2022-'+monthNumber+'-'+d+' '+(hour+1)+':00:00', callback);
+					}
+				}
+			}
+		},
         ],
         // optional callback
         cb);
