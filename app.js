@@ -6,14 +6,18 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var catalogRouter = require('./routes/cafe');  //Import routes for "catalog" area of site
+var compression = require('compression');
+var helmet = require('helmet');
 
 var app = express();
 
-
+app.use(helmet());
 
 //Устанавливаем соединение с mongoose
 var mongoose = require('mongoose');
-//var mongoDB = 'insert_your_database_url_here';//замените url!!!
+var dev_db_url = 'mongodb+srv://cooluser:coolpassword@cluster0-mbdj7.mongodb.net/local_library?retryWrites=true'
+var mongoDB = process.env.MONGODB_URI || dev_db_url
+
 var mongoDB = 'mongodb+srv://waverma:92I7vB07vmwQvms5@cafe.zlank.mongodb.net';
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
@@ -22,6 +26,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
 
+app.use(compression()); 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
