@@ -1,0 +1,32 @@
+extends layout
+
+block content
+
+	div(style='margin-left:20px;margin-top:20px')
+	
+	form(method='POST' action='')
+		div.form-group
+			label(for='first_name') First name:
+			input#first_name.form-control(type='text', placeholder='First name' name='first_name' required='true' value=(undefined===reservation ? '' : reservation.first_name) )
+		div.form-group
+			label(for='last_name') Last name:
+			input#last_name.form-control(type='text', placeholder='Last name' name='last_name' required='true' value=(undefined===reservation ? '' : reservation.last_name) )
+		div.form-group
+			label(for='number') Phone number:
+			input#number.form-control(type='number' size="10" minlength="10" maxlength="10" placeholder='Number without +7' name='number' required='true' value=(undefined===reservation ? '' : reservation.number) )
+			div.form-group
+		
+		div.form-group
+			label(for='reservation') Reservation time:
+			select#reservation.form-control(type='select', placeholder='Select reservation time' name='reservation' required='true' )
+				for reservation in reservations
+					option(value=reservation._id) Столик №#{reservation.table.number} на #{reservation.table.capacity} человек(а) (#{reservation.time_range}). 
+						| Официант: #{reservation.table.waiter.first_name} #{reservation.table.waiter.last_name} (#{reservation.table.waiter.gender})
+		
+		button.btn.btn-primary(type='submit') Забронировать
+	
+	
+	if errors
+		ul
+			for error in errors
+				li!= error.msg
