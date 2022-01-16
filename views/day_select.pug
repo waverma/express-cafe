@@ -8,13 +8,13 @@ block content
 	
 	form(method='POST' action='')
 		div.form-group
-			label(for='day') Day:
+			label(for='day') День, в который хотите посетить нас:
 			input#day.form-control(type='date', placeholder='Day' name='day' required='true')
 		div.form-group
-			label(for='time1') Day:
+			label(for='time1') Время, с которого хотите посетить нас:
 			input#time1.form-control(type='time', placeholder='StartTime' name='time1' required='true')
 		div.form-group
-			label(for='time2') Day:
+			label(for='time2') Время, до которого хотите посетить нас:
 			input#time2.form-control(type='time', placeholder='EndTime' name='time2' required='true')
 		
 		button.btn.btn-primary(type='submit') Найти свободный стол
