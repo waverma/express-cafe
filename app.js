@@ -16,7 +16,8 @@ app.use(helmet());
 //Устанавливаем соединение с mongoose
 var mongoose = require('mongoose');
 //var dev_db_url = 'mongodb+srv://waverma:92I7vB07vmwQvms5@cafe.zlank.mongodb.net'
-var mongoDB = process.env.MONGODB_URI || dev_db_url
+var mongoDB = process.env.MONGODB_URI
+//var mongoDB = process.env.MONGODB_URI || dev_db_url
 
 
 mongoose.connect(mongoDB);
