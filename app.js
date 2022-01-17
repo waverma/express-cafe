@@ -15,10 +15,10 @@ app.use(helmet());
 
 //Устанавливаем соединение с mongoose
 var mongoose = require('mongoose');
-var dev_db_url = 'mongodb+srv://cooluser:coolpassword@cluster0-mbdj7.mongodb.net/local_library?retryWrites=true'
+//var dev_db_url = 'mongodb+srv://waverma:92I7vB07vmwQvms5@cafe.zlank.mongodb.net'
 var mongoDB = process.env.MONGODB_URI || dev_db_url
 
-var mongoDB = 'mongodb+srv://waverma:92I7vB07vmwQvms5@cafe.zlank.mongodb.net';
+
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
